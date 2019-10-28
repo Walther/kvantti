@@ -1,5 +1,7 @@
 # kvantti
-A quantum computer implementation
+A quantum computer simulator implementation.
+
+-  [Blog post 1](https://walther.guru/blog/impl-quantum-part-1/)
 
 ## Intro
 
