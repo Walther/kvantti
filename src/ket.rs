@@ -4,7 +4,6 @@ use num_complex::Complex64;
 /// A ket is a two-dimensional vector.
 /// It has two components, "first" and "second".
 /// These components, individually, are complex numbers.
-/// The value of each component can also be called an amplitude.
 #[derive(Debug, Copy, Clone)]
 pub struct Ket {
   first: Complex64,
@@ -146,13 +145,14 @@ pub trait ValidQuantumState {
 }
 
 // The sums of the squares of the amplitudes must be equal to 1
+// Amplitude of a complex number x is |x|, available as .norm()
+// in the Complex64 type
 impl ValidQuantumState for Ket {
   fn is_valid(&self) -> bool {
-    let a = self.first * self.first;
-    let b = self.second * self.second;
-    let result = a + b;
-    approx_eq!(f64, result.re, COMPLEX_ONE.re, ulps = 2)
-      && approx_eq!(f64, result.im, COMPLEX_ONE.im, ulps = 2)
+    let a = self.first.norm();
+    let b = self.second.norm();
+    let result = (a * a) + (b * b);
+    approx_eq!(f64, result, 1.0, ulps = 2)
   }
 }
 
@@ -173,8 +173,13 @@ fn ket_invalid() {
 
 #[test]
 fn ket_arithmetic_valid() {
-  let a = Complex64::from(0.6) * KET_ZERO;
-  let b = Complex64::from(0.8) * KET_ONE;
+  let a = Complex64 { re: 0.5, im: 0.5 };
+  let b = Complex64 {
+    re: 0.0_f64,
+    im: 1.0 / 2.0_f64.sqrt(),
+  };
+  let a = a * KET_ZERO;
+  let b = b * KET_ONE;
   let c = a + b;
   assert_eq!(c.is_valid(), true)
 }
