@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 num-complex = "0.2"
+float-cmp = "0.5.3"

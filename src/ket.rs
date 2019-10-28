@@ -1,10 +1,11 @@
+use float_cmp::approx_eq;
 use num_complex::Complex64;
 
 /// A ket is a two-dimensional vector.
 /// It has two components, "first" and "second".
 /// These components, individually, are complex numbers.
 /// The value of each component can also be called an amplitude.
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Ket {
   first: Complex64,
   second: Complex64,
@@ -86,14 +87,8 @@ impl Mul<Complex64> for Ket {
 
   fn mul(self, rhs: Complex64) -> Ket {
     Ket {
-      first: Complex64 {
-        re: self.first.re * rhs.re,
-        im: self.first.im * rhs.im,
-      },
-      second: Complex64 {
-        re: self.second.re * rhs.re,
-        im: self.second.im * rhs.im,
-      },
+      first: self.first * rhs,
+      second: self.second * rhs,
     }
   }
 }
@@ -114,14 +109,8 @@ impl Mul<Ket> for Complex64 {
 
   fn mul(self, rhs: Ket) -> Ket {
     Ket {
-      first: Complex64 {
-        re: self.re * rhs.first.re,
-        im: self.im * rhs.first.im,
-      },
-      second: Complex64 {
-        re: self.re * rhs.second.re,
-        im: self.im * rhs.second.im,
-      },
+      first: self * rhs.first,
+      second: self * rhs.second,
     }
   }
 }
@@ -161,7 +150,9 @@ impl ValidQuantumState for Ket {
   fn is_valid(&self) -> bool {
     let a = self.first * self.first;
     let b = self.second * self.second;
-    a + b == COMPLEX_ONE
+    let result = a + b;
+    approx_eq!(f64, result.re, COMPLEX_ONE.re, ulps = 2)
+      && approx_eq!(f64, result.im, COMPLEX_ONE.im, ulps = 2)
   }
 }
 
