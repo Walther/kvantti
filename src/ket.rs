@@ -39,17 +39,17 @@ impl Eq for Ket {}
 // Let's test that our equality checking works
 #[test]
 fn ket_zero_equal_to_itself() {
-  assert_eq!(KET_ZERO == KET_ZERO, true)
+  assert!(KET_ZERO == KET_ZERO)
 }
 
 #[test]
 fn ket_one_equal_to_itself() {
-  assert_eq!(KET_ONE == KET_ONE, true)
+  assert!(KET_ONE == KET_ONE)
 }
 
 #[test]
 fn ket_zero_not_equal_to_ket_one() {
-  assert_eq!(KET_ZERO != KET_ONE, true)
+  assert!(KET_ZERO != KET_ONE)
 }
 
 //  Let's implement adding two Kets together
@@ -66,14 +66,14 @@ impl Add for Ket {
 }
 
 #[test]
-fn ket_zero_add_ket_zero() {
+fn ket_zero_add_ket_one() {
   let sum = KET_ZERO + KET_ONE;
-  assert_eq!(
-    sum,
-    Ket {
-      first: COMPLEX_ONE,
-      second: COMPLEX_ONE,
-    }
+  assert!(
+    sum
+      == Ket {
+        first: COMPLEX_ONE,
+        second: COMPLEX_ONE,
+      },
   )
 }
 
@@ -94,12 +94,12 @@ impl Mul<Complex64> for Ket {
 
 #[test]
 fn mul_ket_zero_with_one() {
-  assert_eq!(KET_ZERO, KET_ZERO * COMPLEX_ONE);
+  assert!(KET_ZERO == KET_ZERO * COMPLEX_ONE);
 }
 
 #[test]
 fn mul_ket_one_with_one() {
-  assert_eq!(KET_ONE, KET_ONE * COMPLEX_ONE);
+  assert!(KET_ONE == KET_ONE * COMPLEX_ONE);
 }
 
 // Let's also do this the other way around
@@ -116,12 +116,12 @@ impl Mul<Ket> for Complex64 {
 
 #[test]
 fn mul_one_with_ket_zero() {
-  assert_eq!(KET_ZERO * COMPLEX_ONE, KET_ZERO);
+  assert!(KET_ZERO * COMPLEX_ONE == KET_ZERO);
 }
 
 #[test]
 fn mul_one_with_ket_one() {
-  assert_eq!(KET_ONE * COMPLEX_ONE, KET_ONE);
+  assert!(KET_ONE * COMPLEX_ONE == KET_ONE);
 }
 
 // Now we can already do pretty nice arithmetic on Kets!
@@ -130,13 +130,13 @@ fn ket_arithmetic() {
   let a = Complex64::from(0.6) * KET_ZERO;
   let b = Complex64::from(0.8) * KET_ONE;
   let c = a + b;
-  assert_eq!(
-    c,
-    Ket {
+
+  assert!(
+    c == Ket {
       first: Complex64::from(0.6),
       second: Complex64::from(0.8),
     }
-  )
+  );
 }
 
 // Quantum states actually have an additional validity constraints
@@ -158,17 +158,17 @@ impl ValidQuantumState for Ket {
 
 #[test]
 fn ket_zero_valid() {
-  assert_eq!(KET_ZERO.is_valid(), true);
+  assert!(KET_ZERO.is_valid())
 }
 
 #[test]
 fn ket_one_valid() {
-  assert_eq!(KET_ONE.is_valid(), true);
+  assert!(KET_ONE.is_valid())
 }
 
 #[test]
 fn ket_invalid() {
-  assert_eq!((KET_ONE + KET_ZERO).is_valid(), false);
+  assert!(!(KET_ONE + KET_ZERO).is_valid())
 }
 
 #[test]
@@ -181,5 +181,5 @@ fn ket_arithmetic_valid() {
   let a = a * KET_ZERO;
   let b = b * KET_ONE;
   let c = a + b;
-  assert_eq!(c.is_valid(), true)
+  assert!(c.is_valid());
 }
