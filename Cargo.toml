@@ -9,5 +9,5 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num-complex = "0.2"
-float-cmp = "0.5.3"
+num-complex = "0.3.1"
+float-cmp = "0.8.0"
